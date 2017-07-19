@@ -20,7 +20,8 @@ Parameters:
     Default: 192.30.252.153,192.30.252.154
   WwwRecord:
     Type: String
-    Description: Set up www.example.net as CNAME for this address
+    Description: >-
+      Set up www.example.net as CNAME for this address
     Default: stig.github.io
 Resources:
   Zone:
