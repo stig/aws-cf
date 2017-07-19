@@ -1,3 +1,2 @@
-project_code: superloopy
-template_path: templates/vpc.json
-region: us-east-1
+project_code: 'sb'
+region: eu-west-2

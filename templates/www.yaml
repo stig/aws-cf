@@ -1,7 +1,8 @@
+AWSTemplateFormatVersion: "2010-09-09"
 Parameters:
     DomainName:
         Type: String
-        Default: www.superloopy.io
+        Default: example.net
 Outputs:
     Hostname:
         Description: "TODO"
