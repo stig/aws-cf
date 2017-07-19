@@ -3,15 +3,15 @@ Parameters:
   DomainName:
     Type: String
     Default: example.net
-  PrimaryMx:
-    Type: String
-    Default: spool.mail.gandi.net
-  SecondaryMx:
-    Type: String
-    Default: fb.mail.gandi.net
   TTL:
     Type: Number
     Default: 600
+  MxRecords:
+    Type: CommaDelimitedList
+    Description: >-
+      A comma-separated list of entries for MX servers. Each entry
+      should have a priority and domain name, separated by a space.
+    Default: 10 spool.mail.gandi.net,50 fb.mail.gandi.net
   ApexRecords:
     Type: CommaDelimitedList
     Description: >-
@@ -38,13 +38,7 @@ Resources:
       HostedZoneId: !Ref Zone
       Type: MX
       TTL: !Ref TTL
-      ResourceRecords:
-        - !Join
-          - ""
-          - [10, " ", !Ref PrimaryMx, "."]
-        - !Join
-          - ""
-          - [50, " ", !Ref SecondaryMx, "."]
+      ResourceRecords: !Ref MxRecords
   ApexRecordSet:
     Type: 'AWS::Route53::RecordSet'
     Properties:
