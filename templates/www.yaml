@@ -1,57 +1,47 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Parameters:
-    DomainName:
-        Type: String
-        Default: example.net
+  DomainName:
+    Type: String
+    Default: www.example.net
 Outputs:
-    Hostname:
-        Description: "TODO"
-        Value: !GetAtt CloudFront.DomainName
-    Bucketname:
-        Value: !Ref SiteBucket
-    LogBucketName:
-        Value: !Ref LogBucket
+  Hostname:
+    Description: >-
+      The CloudFront domain name that we can add a CNAME to later.
+    Value: !GetAtt ApexCloudFront.DomainName
 Resources:
-    SiteBucket:
-        Type: "AWS::S3::Bucket"
-        Properties:
-            LoggingConfiguration:
-                DestinationBucketName: !Ref LogBucket
-            WebsiteConfiguration:
-                IndexDocument: index.html
-    LogBucket:
-        Type: "AWS::S3::Bucket"
-        Properties:
-            AccessControl: LogDeliveryWrite
-    CloudFront:
-        Type: "AWS::CloudFront::Distribution"
-        Properties:
-            DistributionConfig:
-                Origins:
-                    -
-                        DomainName:
-                            "Fn::Join":
-                                - "."
-                                -
-                                    - !Ref SiteBucket
-                                    - "s3-website.eu-west-2.amazonaws.com"
-                        Id: origin
-                        CustomOriginConfig:
-                            OriginProtocolPolicy: http-only
-                DefaultCacheBehavior:
-                    TargetOriginId: origin
-                    DefaultTTL: 5
-                    MaxTTL: 30
-                    ForwardedValues:
-                        QueryString: false
-                    ViewerProtocolPolicy: redirect-to-https
-                Enabled: true
-                Aliases:
-                    - !Ref DomainName
-                ViewerCertificate:
-                    AcmCertificateArn: !Ref SSL
-                    SslSupportMethod: sni-only
-    SSL:
-        Type: "AWS::CertificateManager::Certificate"
-        Properties:
-            DomainName: !Ref DomainName
+  SSL:
+    Type: 'AWS::CertificateManager::Certificate'
+    Properties:
+      DomainName: !Ref DomainName
+      SubjectAlternativeNames:
+        - !Join ['.', ['www', !Ref DomainName]]
+  ApexBucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: !Ref DomainName
+      WebsiteConfiguration:
+        RedirectAllRequestsTo:
+          HostName: !Join ['.', ['www', !Ref DomainName]]
+          Protocol: https
+  ApexCloudFront:
+    Type: 'AWS::CloudFront::Distribution'
+    Properties:
+      DistributionConfig:
+        Aliases:
+          - !Ref DomainName
+        Enabled: True
+        Origins:                                    # (ref:origins)
+          - DomainName: !Select [1, !Split ["//", !GetAtt ApexBucket.WebsiteURL]]
+            Id: origin
+            CustomOriginConfig:
+              OriginProtocolPolicy: http-only
+        DefaultCacheBehavior:                       # (ref:defaultcaching)
+          TargetOriginId: origin
+          DefaultTTL: 5
+          MaxTTL: 30
+          ForwardedValues:
+            QueryString: false
+          ViewerProtocolPolicy: redirect-to-https
+        ViewerCertificate:                          # (ref:viewercert)
+          AcmCertificateArn: !Ref SSL
+          SslSupportMethod: sni-only

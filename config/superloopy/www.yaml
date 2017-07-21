@@ -1,0 +1,3 @@
+template_path: templates/www.yaml
+parameters:
+  DomainName: superloopy.io
