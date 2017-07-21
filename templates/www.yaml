@@ -31,20 +31,20 @@ Resources:
         Aliases:
           - !Ref DomainName
         Enabled: True
-        Origins:                                    # (ref:origins)
+        Origins:
           - DomainName: !Select
               - 1
               - !Split ["//", !GetAtt ApexBucket.WebsiteURL]
             Id: origin
             CustomOriginConfig:
               OriginProtocolPolicy: http-only
-        DefaultCacheBehavior:                       # (ref:defaultcaching)
+        DefaultCacheBehavior:
           TargetOriginId: origin
           DefaultTTL: 5
           MaxTTL: 30
           ForwardedValues:
             QueryString: false
           ViewerProtocolPolicy: redirect-to-https
-        ViewerCertificate:                          # (ref:viewercert)
+        ViewerCertificate:
           AcmCertificateArn: !Ref SSL
           SslSupportMethod: sni-only
