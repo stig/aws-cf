@@ -4,9 +4,10 @@ Parameters:
     Type: String
     Default: example.net
 Outputs:
-  Hostname:
+  ApexCloudFrontDomain:
     Description: >-
-      The CloudFront domain name that we can add a CNAME to later.
+      The CloudFront domain name for the Apex domain that we can use
+      to add a CNAME to later.
     Value: !GetAtt ApexCloudFront.DomainName
 Resources:
   SSL:
