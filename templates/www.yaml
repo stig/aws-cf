@@ -31,7 +31,9 @@ Resources:
           - !Ref DomainName
         Enabled: True
         Origins:                                    # (ref:origins)
-          - DomainName: !Select [1, !Split ["//", !GetAtt ApexBucket.WebsiteURL]]
+          - DomainName: !Select
+              - 1
+              - !Split ["//", !GetAtt ApexBucket.WebsiteURL]
             Id: origin
             CustomOriginConfig:
               OriginProtocolPolicy: http-only
