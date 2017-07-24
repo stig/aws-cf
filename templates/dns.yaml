@@ -12,26 +12,18 @@ Parameters:
       A comma-separated list of entries for MX servers. Each entry
       should have a priority and domain name, separated by a space.
     Default: 10 spool.mail.gandi.net,50 fb.mail.gandi.net
-  ApexRecords:
-    Type: CommaDelimitedList
-    Description: >-
-      The default here is for GitHub Pages, cf
-      https://help.github.com/articles/setting-up-an-apex-domain/
-    Default: 192.30.252.153,192.30.252.154
-  WwwRecord:
+  DependentStackName:
     Type: String
     Description: >-
-      Set up www.example.net as CNAME for this address
-    Default: stig.github.io
+      Name of stack we depend on and will grab exported values from.
+      Computed by Sceptre.
 Resources:
   Zone:
     Type: 'AWS::Route53::HostedZone'
     Properties:
       Name: !Ref DomainName
       HostedZoneConfig:
-        Comment: !Join
-          - " "
-          - ["My hosted zone for", !Ref DomainName]
+        Comment: !Sub "My hosted zone for ${DomainName}"
   MxRecordSet:
     Type: 'AWS::Route53::RecordSet'
     Properties:
@@ -46,16 +38,16 @@ Resources:
       Name: !Ref DomainName
       HostedZoneId: !Ref Zone
       Type: A
-      TTL: !Ref TTL
-      ResourceRecords: !Ref ApexRecords
+      AliasTarget:
+        DNSName:
+          Fn::ImportValue: !Sub "${DependentStackName}-RedirDomain"
+        HostedZoneId: Z2FDTNDATAQYW2
   WwwRecordSet:
     Type: 'AWS::Route53::RecordSet'
     Properties:
-      Name: !Join
-        - ""
-        - ['www.', !Ref DomainName, '.']
+      Name: !Sub "www.${DomainName}"
       HostedZoneId: !Ref Zone
       Type: CNAME
       TTL: !Ref TTL
       ResourceRecords:
-        - !Ref WwwRecord
+        - Fn::ImportValue: !Sub "${DependentStackName}-SiteDomain"

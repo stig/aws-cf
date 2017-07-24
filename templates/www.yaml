@@ -4,27 +4,39 @@ Parameters:
     Type: String
     Default: example.net
 Outputs:
-  ApexCloudFrontDomain:
+  RedirDomain:
     Description: >-
-      The CloudFront domain name for the Apex domain that we can use
-      to add a CNAME to later.
+      The CloudFront domain name for our Apex domain that we use to
+      redirect to our SiteDomain. We will use this to add a CNAME from
+      our DNS template.
     Value: !GetAtt ApexCloudFront.DomainName
-  SiteCloudFrontDomain:
+    Export:
+      Name: !Sub "${AWS::StackName}-RedirDomain"
+  SiteDomain:
+    Description: >-
+      The CloudFront domain name for our site. We will use this to add
+      a CNAME from our DNS template.
     Value: !GetAtt SiteCloudFront.DomainName
+    Export:
+      Name: !Sub "${AWS::StackName}-SiteDomain"
+  StackName:
+    Description: >-
+      The stack name to use for templates that depend on this one.
+    Value: !Ref 'AWS::StackName'
 Resources:
   SSL:
     Type: 'AWS::CertificateManager::Certificate'
     Properties:
       DomainName: !Ref DomainName
       SubjectAlternativeNames:
-        - !Join ['.', ['www', !Ref DomainName]]
+        - !Sub "www.${DomainName}"
   ApexBucket:
     Type: 'AWS::S3::Bucket'
     Properties:
       BucketName: !Ref DomainName
       WebsiteConfiguration:
         RedirectAllRequestsTo:
-          HostName: !Join ['.', ['www', !Ref DomainName]]
+          HostName: !Sub "www.${DomainName}"
           Protocol: https
   ApexCloudFront:
     Type: 'AWS::CloudFront::Distribution'
@@ -54,11 +66,11 @@ Resources:
     Type: 'AWS::S3::Bucket'
     Properties:
       AccessControl: LogDeliveryWrite
-      BucketName: !Join ['.', ['www', !Ref DomainName, 'logs']]
+      BucketName: !Sub "www.${DomainName}-logs"
   SiteBucket:
     Type: 'AWS::S3::Bucket'
     Properties:
-      BucketName: !Join ['.', ['www', !Ref DomainName]]
+      BucketName: !Sub "www.${DomainName}"
       WebsiteConfiguration:
         IndexDocument: index.html
         ErrorDocument: 404.html
@@ -69,7 +81,7 @@ Resources:
     Properties:
       DistributionConfig:
         Aliases:
-          - !Join ['.', ['www', !Ref DomainName]]
+          - !Sub "www.${DomainName}"
         Enabled: True
         Origins:
           - DomainName: !Select

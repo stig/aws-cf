@@ -1,3 +1,4 @@
 template_path: templates/dns.yaml
 parameters:
   DomainName: superloopy.io
+  DependentStackName: !stack_output www::StackName
