@@ -1,0 +1,2 @@
+These are the CloudFormation templates, managed by [[https://sceptre.cloudreach.com/latest/][Sceptre]], that I use
+to configure AWS to host my [[https://www.superloopy.io][blog]].
