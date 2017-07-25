@@ -45,6 +45,7 @@ Resources:
         Aliases:
           - !Ref DomainName
         Enabled: True
+        HttpVersion: http2
         Origins:
           - DomainName: !Select
               - 1
@@ -83,6 +84,7 @@ Resources:
         Aliases:
           - !Sub "www.${DomainName}"
         Enabled: True
+        HttpVersion: http2
         Origins:
           - DomainName: !Select
               - 1
