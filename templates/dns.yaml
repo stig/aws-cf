@@ -42,6 +42,16 @@ Resources:
         DNSName:
           Fn::ImportValue: !Sub "${DependentStackName}-RedirDomain"
         HostedZoneId: Z2FDTNDATAQYW2
+  ApexIPv6RecordSet:
+    Type: 'AWS::Route53::RecordSet'
+    Properties:
+      Name: !Ref DomainName
+      HostedZoneId: !Ref Zone
+      Type: AAAA
+      AliasTarget:
+        DNSName:
+          Fn::ImportValue: !Sub "${DependentStackName}-RedirDomain"
+        HostedZoneId: Z2FDTNDATAQYW2
   WwwRecordSet:
     Type: 'AWS::Route53::RecordSet'
     Properties:
