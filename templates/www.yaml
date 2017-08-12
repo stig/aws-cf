@@ -10,19 +10,11 @@ Outputs:
       redirect to our SiteDomain. We will use this to add a CNAME from
       our DNS template.
     Value: !GetAtt ApexCloudFront.DomainName
-    Export:
-      Name: !Sub "${AWS::StackName}-RedirDomain"
   SiteCloudFrontDomain:
     Description: >-
       The CloudFront domain name for our site. We will use this to add
       a CNAME from our DNS template.
     Value: !GetAtt SiteCloudFront.DomainName
-    Export:
-      Name: !Sub "${AWS::StackName}-SiteDomain"
-  StackName:
-    Description: >-
-      The stack name to use for templates that depend on this one.
-    Value: !Ref 'AWS::StackName'
 Resources:
   SSL:
     Type: 'AWS::CertificateManager::Certificate'
