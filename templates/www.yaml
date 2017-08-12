@@ -4,7 +4,7 @@ Parameters:
     Type: String
     Default: example.net
 Outputs:
-  RedirDomain:
+  ApexCloudFrontDomain:
     Description: >-
       The CloudFront domain name for our Apex domain that we use to
       redirect to our SiteDomain. We will use this to add a CNAME from
@@ -12,7 +12,7 @@ Outputs:
     Value: !GetAtt ApexCloudFront.DomainName
     Export:
       Name: !Sub "${AWS::StackName}-RedirDomain"
-  SiteDomain:
+  SiteCloudFrontDomain:
     Description: >-
       The CloudFront domain name for our site. We will use this to add
       a CNAME from our DNS template.

@@ -1,4 +1,5 @@
 template_path: templates/dns.yaml
 parameters:
   DomainName: superloopy.io
-  DependentStackName: !stack_output www::StackName
+  ApexCloudFrontDomain: !stack_output www::ApexCloudFrontDomain
+  SiteCloudFrontDomain: !stack_output www::SiteCloudFrontDomain
