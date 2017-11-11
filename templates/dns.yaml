@@ -12,6 +12,10 @@ Parameters:
       A comma-separated list of entries for MX servers. Each entry
       should have a priority and domain name, separated by a space.
     Default: 10 spool.mail.gandi.net,50 fb.mail.gandi.net
+  TxtRecord:
+    Type: String
+    Description: Text record (used for SPAM filtering)
+    Default: '"v=spf1 include:_mailcust.gandi.net ?all"'
   ApexCloudFrontDomain:
     Type: String
     Description: Name of domain we want to use for redirections.
@@ -60,3 +64,12 @@ Resources:
       TTL: !Ref TTL
       ResourceRecords:
         - !Ref SiteCloudFrontDomain
+  TxtRecordSet:
+    Type: 'AWS::Route53::RecordSet'
+    Properties:
+      Name: !Ref DomainName
+      HostedZoneId: !Ref Zone
+      Type: TXT
+      TTL: !Ref TTL
+      ResourceRecords:
+        - !Ref TxtRecord
