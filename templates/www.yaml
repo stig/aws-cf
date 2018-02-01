@@ -3,18 +3,7 @@ Parameters:
   DomainName:
     Type: String
     Default: example.net
-Outputs:
-  ApexCloudFrontDomain:
-    Description: >-
-      The CloudFront domain name for our Apex domain that we use to
-      redirect to our SiteDomain. We will use this to add a CNAME from
-      our DNS template.
-    Value: !GetAtt ApexCloudFront.DomainName
-  SiteCloudFrontDomain:
-    Description: >-
-      The CloudFront domain name for our site. We will use this to add
-      a CNAME from our DNS template.
-    Value: !GetAtt SiteCloudFront.DomainName
+
 Resources:
   SSL:
     Type: 'AWS::CertificateManager::Certificate'
@@ -22,6 +11,7 @@ Resources:
       DomainName: !Ref DomainName
       SubjectAlternativeNames:
         - !Sub "www.${DomainName}"
+
   ApexBucket:
     Type: 'AWS::S3::Bucket'
     Properties:
@@ -55,11 +45,13 @@ Resources:
         ViewerCertificate:
           AcmCertificateArn: !Ref SSL
           SslSupportMethod: sni-only
+
   LogBucket:
     Type: 'AWS::S3::Bucket'
     Properties:
       AccessControl: LogDeliveryWrite
       BucketName: !Sub "www.${DomainName}-logs"
+
   SiteBucket:
     Type: 'AWS::S3::Bucket'
     Properties:
@@ -69,6 +61,7 @@ Resources:
         ErrorDocument: 404.html
       LoggingConfiguration:
         DestinationBucketName: !Ref LogBucket
+
   SiteCloudFront:
     Type: 'AWS::CloudFront::Distribution'
     Properties:
@@ -94,3 +87,16 @@ Resources:
         ViewerCertificate:
           AcmCertificateArn: !Ref SSL
           SslSupportMethod: sni-only
+
+Outputs:
+  ApexCloudFrontDomain:
+    Description: >-
+      The CloudFront domain name for our Apex domain that we use to
+      redirect to our SiteDomain. We will use this to add a CNAME from
+      our DNS template.
+    Value: !GetAtt ApexCloudFront.DomainName
+  SiteCloudFrontDomain:
+    Description: >-
+      The CloudFront domain name for our site. We will use this to add
+      a CNAME from our DNS template.
+    Value: !GetAtt SiteCloudFront.DomainName
