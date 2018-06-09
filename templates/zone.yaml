@@ -51,5 +51,4 @@ Resources:
 Outputs:
 
   HostedZoneId:
-    Type: String
     Value: !Ref Zone
