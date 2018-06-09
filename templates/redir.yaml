@@ -4,6 +4,10 @@ Parameters:
 
   DomainName:
     Type: String
+    Default: example.net
+
+  RedirectTargetDomain:
+    Type: String
     Default: www.example.net
 
   HostedZoneId:
@@ -16,34 +20,29 @@ Resources:
     Properties:
       DomainName: !Ref DomainName
 
-  LogBucket:
-    Type: 'AWS::S3::Bucket'
-    Properties:
-      AccessControl: LogDeliveryWrite
-      BucketName: !Sub "${DomainName}-logs"
-
-  SiteBucket:
+  RedirectBucket:
     Type: 'AWS::S3::Bucket'
     Properties:
       BucketName: !Ref DomainName
       WebsiteConfiguration:
         IndexDocument: index.html
-        ErrorDocument: 404.html
-      LoggingConfiguration:
-        DestinationBucketName: !Ref LogBucket
+        RoutingRules:
+          - RedirectRule:
+              HostName: !Ref RedirectTargetDomain
+              Protocol: https
+              HttpRedirectCode: 302
 
   CloudFront:
     Type: 'AWS::CloudFront::Distribution'
     Properties:
       DistributionConfig:
-        Aliases:
-          - !Ref DomainName
+        Aliases: [ !Ref DomainName ]
         Enabled: True
         HttpVersion: http2
         Origins:
           - DomainName: !Select
               - 1
-              - !Split ["//", !GetAtt SiteBucket.WebsiteURL]
+              - !Split ["//", !GetAtt RedirectBucket.WebsiteURL]
             Id: origin
             CustomOriginConfig:
               OriginProtocolPolicy: http-only

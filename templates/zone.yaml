@@ -1,0 +1,55 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Parameters:
+
+  DomainName:
+    Type: String
+    Description: The FQDN for our zone
+
+  TTL:
+    Type: Number
+    Default: 600
+
+  MxRecords:
+    Type: CommaDelimitedList
+    Description: >-
+      A comma-separated list of entries for MX servers. Each entry
+      should have a priority and domain name, separated by a space.
+    Default: 10 spool.mail.gandi.net,50 fb.mail.gandi.net
+
+  TxtRecord:
+    Type: String
+    Description: Text record (used for SPAM filtering)
+    Default: '"v=spf1 include:_mailcust.gandi.net ?all"'
+
+Resources:
+
+  Zone:
+    Type: 'AWS::Route53::HostedZone'
+    Properties:
+      Name: !Ref DomainName
+
+  MxRecordSet:
+    Type: 'AWS::Route53::RecordSet'
+    Properties:
+      Name: !Ref DomainName
+      HostedZoneId: !Ref Zone
+      Type: MX
+      TTL: !Ref TTL
+      ResourceRecords: !Ref MxRecords
+
+  TxtRecordSet:
+    Type: 'AWS::Route53::RecordSet'
+    Properties:
+      Name: !Ref DomainName
+      HostedZoneId: !Ref Zone
+      Type: TXT
+      TTL: !Ref TTL
+      ResourceRecords:
+        - !Ref TxtRecord
+
+Outputs:
+
+  HostedZoneId:
+    Type: String
+    Value: !Ref Zone

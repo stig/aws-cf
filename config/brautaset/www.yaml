@@ -1,0 +1,5 @@
+role_arn: arn:aws:iam::122588848868:role/WwwHosting
+template_path: templates/www.yaml
+properties:
+  DomainName: www.brautaset.org
+  HostedZoneId: !stack_output zone::HostedZoneId
