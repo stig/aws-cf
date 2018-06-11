@@ -50,6 +50,7 @@ Resources:
           TargetOriginId: origin
           DefaultTTL: 5
           MaxTTL: 30
+          Compress: true
           ForwardedValues:
             QueryString: false
           ViewerProtocolPolicy: allow-all
