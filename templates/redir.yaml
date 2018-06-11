@@ -52,7 +52,7 @@ Resources:
           MaxTTL: 30
           ForwardedValues:
             QueryString: false
-          ViewerProtocolPolicy: redirect-to-https
+          ViewerProtocolPolicy: allow-all
         ViewerCertificate:
           AcmCertificateArn: !Ref SSL
           SslSupportMethod: sni-only
