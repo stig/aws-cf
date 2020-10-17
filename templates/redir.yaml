@@ -10,9 +10,6 @@ Parameters:
     Type: String
     Default: www.example.net
 
-  HostedZoneId:
-    Type: String
-
 Resources:
 
   SSL:
@@ -57,23 +54,3 @@ Resources:
         ViewerCertificate:
           AcmCertificateArn: !Ref SSL
           SslSupportMethod: sni-only
-
-  ARecordSet:
-    Type: 'AWS::Route53::RecordSet'
-    Properties:
-      Name: !Ref DomainName
-      HostedZoneId: !Ref HostedZoneId
-      Type: A
-      AliasTarget:
-        DNSName: !GetAtt CloudFront.DomainName
-        HostedZoneId: Z2FDTNDATAQYW2
-
-  AAAARecordSet:
-    Type: 'AWS::Route53::RecordSet'
-    Properties:
-      Name: !Ref DomainName
-      HostedZoneId: !Ref HostedZoneId
-      Type: AAAA
-      AliasTarget:
-        DNSName: !GetAtt CloudFront.DomainName
-        HostedZoneId: Z2FDTNDATAQYW2

@@ -3,4 +3,3 @@ template_path: templates/redir.yaml
 parameters:
   DomainName: brautaset.org
   RedirectTargetDomain: www.brautaset.org
-  HostedZoneId: !stack_output zone::HostedZoneId
