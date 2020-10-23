@@ -1,2 +1,13 @@
+#+title: Sceptre CloudFormation templates
+
 These are the CloudFormation templates, managed by [[https://sceptre.cloudreach.com/latest/][Sceptre]], that I use
 to configure AWS to host my [[https://www.brautaset.org][blog]].
+
+
+* Usage, TL;DR version
+
+: brew install pipenv
+: brew install python@3.8
+: pipenv install
+: pipenv run sceptre describe-env brautaset
+: pipenv run sceptre launch-env brautaset
