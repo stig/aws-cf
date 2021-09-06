@@ -26,6 +26,123 @@ Resources:
       WebsiteConfiguration:
         IndexDocument: index.html
         ErrorDocument: 404.html
+        RoutingRules:
+
+          # Redirect article index to posts
+          - RoutingRuleCondition:
+              KeyPrefixEquals: articles.html
+            RedirectRule:
+              HostName: !Ref DomainName
+              ReplaceKeyPrefixWith: posts.html
+              HttpRedirectCode: 301
+
+          # Special rule to avoid a name clash
+          - RoutingRuleCondition:
+              KeyPrefixEquals: articles/2015/resolutions
+            RedirectRule:
+              HostName: !Ref DomainName
+              ReplaceKeyPrefixWith: posts/2015-resolutions
+              HttpRedirectCode: 301
+
+
+          # Redirect remaining articles/20XX to posts/
+          - RoutingRuleCondition:
+              KeyPrefixEquals: articles/2020/
+            RedirectRule:
+              HostName: !Ref DomainName
+              ReplaceKeyPrefixWith: posts/
+              HttpRedirectCode: 301
+          - RoutingRuleCondition:
+              KeyPrefixEquals: articles/2019/
+            RedirectRule:
+              HostName: !Ref DomainName
+              ReplaceKeyPrefixWith: posts/
+              HttpRedirectCode: 301
+          - RoutingRuleCondition:
+              KeyPrefixEquals: articles/2018/
+            RedirectRule:
+              HostName: !Ref DomainName
+              ReplaceKeyPrefixWith: posts/
+              HttpRedirectCode: 301
+          - RoutingRuleCondition:
+              KeyPrefixEquals: articles/2017/
+            RedirectRule:
+              HostName: !Ref DomainName
+              ReplaceKeyPrefixWith: posts/
+              HttpRedirectCode: 301
+          - RoutingRuleCondition:
+              KeyPrefixEquals: articles/2016/
+            RedirectRule:
+              HostName: !Ref DomainName
+              ReplaceKeyPrefixWith: posts/
+              HttpRedirectCode: 301
+          - RoutingRuleCondition:
+              KeyPrefixEquals: articles/2015/
+            RedirectRule:
+              HostName: !Ref DomainName
+              ReplaceKeyPrefixWith: posts/
+              HttpRedirectCode: 301
+          - RoutingRuleCondition:
+              KeyPrefixEquals: articles/2014/
+            RedirectRule:
+              HostName: !Ref DomainName
+              ReplaceKeyPrefixWith: posts/
+              HttpRedirectCode: 301
+          - RoutingRuleCondition:
+              KeyPrefixEquals: articles/2013/
+            RedirectRule:
+              HostName: !Ref DomainName
+              ReplaceKeyPrefixWith: posts/
+              HttpRedirectCode: 301
+          - RoutingRuleCondition:
+              KeyPrefixEquals: articles/2010/
+            RedirectRule:
+              HostName: !Ref DomainName
+              ReplaceKeyPrefixWith: posts/
+              HttpRedirectCode: 301
+          - RoutingRuleCondition:
+              KeyPrefixEquals: articles/2008/
+            RedirectRule:
+              HostName: !Ref DomainName
+              ReplaceKeyPrefixWith: posts/
+              HttpRedirectCode: 301
+          - RoutingRuleCondition:
+              KeyPrefixEquals: articles/2007/
+            RedirectRule:
+              HostName: !Ref DomainName
+              ReplaceKeyPrefixWith: posts/
+              HttpRedirectCode: 301
+          - RoutingRuleCondition:
+              KeyPrefixEquals: articles/2006/
+            RedirectRule:
+              HostName: !Ref DomainName
+              ReplaceKeyPrefixWith: posts/
+              HttpRedirectCode: 301
+          - RoutingRuleCondition:
+              KeyPrefixEquals: articles/2005/
+            RedirectRule:
+              HostName: !Ref DomainName
+              ReplaceKeyPrefixWith: posts/
+              HttpRedirectCode: 301
+          - RoutingRuleCondition:
+              KeyPrefixEquals: articles/2004/
+            RedirectRule:
+              HostName: !Ref DomainName
+              ReplaceKeyPrefixWith: posts/
+              HttpRedirectCode: 301
+          - RoutingRuleCondition:
+              KeyPrefixEquals: articles/2002/
+            RedirectRule:
+              HostName: !Ref DomainName
+              ReplaceKeyPrefixWith: posts/
+              HttpRedirectCode: 301
+          - RoutingRuleCondition:
+              KeyPrefixEquals: articles/2001/
+            RedirectRule:
+              HostName: !Ref DomainName
+              ReplaceKeyPrefixWith: posts/
+              HttpRedirectCode: 301
+
       LoggingConfiguration:
         DestinationBucketName: !Ref LogBucket
 
