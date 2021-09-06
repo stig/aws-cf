@@ -27,7 +27,7 @@ Resources:
           - RedirectRule:
               HostName: !Ref RedirectTargetDomain
               Protocol: https
-              HttpRedirectCode: 302
+              HttpRedirectCode: 301
 
   CloudFront:
     Type: 'AWS::CloudFront::Distribution'
