@@ -1,4 +1,4 @@
 role_arn: arn:aws:iam::122588848868:role/WwwHosting
-template_path: templates/www.yaml
+template_path: www.yaml
 parameters:
   DomainName: www.brautaset.org

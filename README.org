@@ -7,5 +7,5 @@ to configure AWS to host my [[https://www.brautaset.org][blog]].
 * Usage, TL;DR version
 
 : pipenv install
-: pipenv run sceptre describe-env brautaset
-: pipenv run sceptre launch-env brautaset
+: pipenv run sceptre status brautaset
+: pipenv run sceptre update brautaset

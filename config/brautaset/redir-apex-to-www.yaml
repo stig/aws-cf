@@ -1,5 +1,5 @@
 role_arn: arn:aws:iam::122588848868:role/WwwHosting
-template_path: templates/redir.yaml
+template_path: redir.yaml
 parameters:
   DomainName: brautaset.org
   RedirectTargetDomain: www.brautaset.org
